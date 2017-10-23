@@ -7,6 +7,8 @@
 
 var fs = require('fs'),
     _ = require('lodash'),
+    logger = require('winston'),
+    util = require('util'),
     pokedex = JSON.parse(fs.readFileSync(__dirname + '/../locale/pokemon.en.json'));
 
 /** Dictionary of known Pokémon */
@@ -22,6 +24,13 @@ exports.getPokemonIdByName = function(name) {
         return p.toLowerCase() === name.toLowerCase();
     });
 };
+
+exports.getPokemonIdByFuzzyName = function(name) {
+    return _.filter(pokedex, function(p) {
+        return p.toLowerCase().indexOf(name.toLowerCase()) != -1;
+    });
+};
+
 
 // Receives an array and returns the pokedex numbers of the given pokemen
 // If a given pokemon name doesn't exist, it is ignored.
@@ -50,6 +59,28 @@ exports.getPokemonIdsFromArgumentString = function (str) {
             // Pokémon name passed
             var id = Number(exports.getPokemonIdByName(pokemon));
             if (id !== NaN) ids.push(id);
+        }
+    });
+
+    return ids;
+};
+
+
+exports.fuzzyFindPokemonIdsFromArgumentString = function (str) {
+    var args = str.split(/[\s,]/).filter(function(value) {
+        return value !== '';
+    });
+
+    var ids = [];
+
+    args.map(function(pokemon) {
+        if (!isNaN(Number(pokemon))) {
+            // Pokedex number passed
+            ids.push(Number(pokemon));
+        } else {
+            // Pokémon name passed
+            var newIds = exports.getPokemonIdByFuzzyName(pokemon);
+            ids = ids.concat(newIds);
         }
     });
 

@@ -1,27 +1,21 @@
 'use strict';
-
-var pokedex = require('../pokedex'),
-    logger = require('winston');
-
 /**
- * Stop command
- * @module command/stop
+ * Start command
+ * @module command/start
  */
 module.exports = {
 
     /** Command name */
-    name: '/stop',
+    name: '/help',
 
     /** Command regex pattern */
-    pattern: /\/stop/i,
+    pattern: /\/helphelphep/i,
 
     /** Command's description to be listed in /help */
-    description: '/stop - Stop receiving notifications',
+    description: '/help - Shows you a list of commands with a description',
 
     /** Is the command listed in Telegram's command list? */
-    list: function(user) {
-        return user.active;
-    },
+    list: true,
 
     /**
      * Callback to execute when a user executes the command.
@@ -31,10 +25,6 @@ module.exports = {
      * @param {Boolean} created - Was the user created as a result of the command call?
      */
     callback: function(msg, match, user, created) {
-        user.active = false;
-        user.save();
-        logger.info('User %s is now inactive', user.telegramId);
-        return 'Bot stopped. /start again later!';
     }
 
 };

@@ -12,13 +12,15 @@ module.exports = {
     name: '/list',
 
     /** Command regex pattern */
-    pattern: /\/list/,
+    pattern: /\/list/i,
 
     /** Command's description to be listed in /help */
     description: '/list - Lists Pokémon on your watchlist',
 
     /** Is the command listed in Telegram's command list? */
-    list: true,
+    list: function(user) {
+        return user.active === true;
+    },
 
     /**
      * Callback to execute when a user executes the command.

@@ -7,10 +7,10 @@ var TelegramBot = require('node-telegram-bot-api'),
 /**
  * Telegram bot.
  */
-module.exports = function(config) {
+module.exports = function(config, listener) {
 
     var bot = new TelegramBot(config.api_token, {polling: true});
-    var commandManager = require('./commandManager')(config, bot);
+    var commandManager = require('./commandManager')(config, bot, listener);
     var exports = {};
 
     /** Sends a Google Maps static image and directions link to the watching users */

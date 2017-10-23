@@ -11,5 +11,8 @@ module.exports = [
     require('./list'),
     require('./pokedex'),
     require('./start'),
-    require('./stop')
+    require('./stop'),
+    require('./helpstub'),
+    require('./gymdebug'),
+    require('./raid')
 ];

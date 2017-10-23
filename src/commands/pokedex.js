@@ -1,6 +1,8 @@
 'use strict';
 
 var pokedex = require('../pokedex'),
+    logger = require('winston'),
+    util = require('util'),
     _ = require('lodash');
 
 /** Pokedex command
@@ -12,10 +14,10 @@ module.exports = {
     name: '/pokedex',
 
     /** Command regex pattern */
-    pattern: /\/pokedex/,
+    pattern: /\/pokedex ?([^ ]*)/i,
 
     /** Command's description to be listed in /help */
-    description: '/pokedex - List all known Pokémon',
+    description: '/pokedex [name]- Searches for a pokemon',
 
     /** Is the command listed in Telegram's command list? */
     list: true,
@@ -28,12 +30,30 @@ module.exports = {
      * @param {Boolean} created - Was the user created as a result of the command call?
      */
     callback: function(msg, match, user, created) {
+	var search = "";
+	if(match[1])
+	    search = match[1];
+
+
         var names = [];
+	var i = 0;
         _.forEach(pokedex.pokedex, function(name, number) {
-            names.push(number + ') ' + name);
+	    if(search != "")
+		if(name.toLowerCase().indexOf(search.toLowerCase()) == -1)
+		    return;
+
+	    var index = Math.floor(i/100);
+
+	    while(names.length <= index)
+		names.push([]);
+            names[index].push(number + ') ' + name);
+	    i++;
         });
 
-        return 'All known Pokémon:\n\n' + names.join('\n');
+	for(var i in names)
+	    names[i] = names[i].join("\n");
+
+	return names;
     }
 
 };

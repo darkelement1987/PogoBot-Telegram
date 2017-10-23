@@ -1,7 +1,8 @@
 'use strict';
 
 var pokedex = require('../pokedex'),
-    logger = require('winston');
+    logger = require('winston'),
+    config   = require('config.json')('./config.json');
 
 /**
  * Start command
@@ -13,7 +14,7 @@ module.exports = {
     name: '/start',
 
     /** Command regex pattern */
-    pattern: /\/start/,
+    pattern: /\/start/i,
 
     /** Command's description to be listed in /help */
     description: '/start - Start the bot',
@@ -34,7 +35,7 @@ module.exports = {
         if (created) {
             logger.info('Created new user with id %s', user.telegramId);
             // New users start with the default watchlist
-            user.watchlist = Pokedex.getPokemonIdsByNames(config.watchlist);
+            user.watchlist = pokedex.getPokemonIdsByNames(config.watchlist);
         } else {
             user.active = true;
             user.save();

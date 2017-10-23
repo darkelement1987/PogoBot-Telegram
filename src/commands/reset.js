@@ -13,13 +13,13 @@ module.exports = {
     name: '/reset',
 
     /** Command regex pattern */
-    pattern: /\/reset/,
+    pattern: /\/reset/i,
 
     /** Command's description to be listed in /help */
     description: '/reset - Reset your watchlist to the default.',
 
     /** Is the command listed in Telegram's command list? */
-    list: true,
+    list: false,
 
     /**
      * Callback to execute when a user executes the command.
